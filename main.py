@@ -2,16 +2,17 @@ from transformers import pipeline
 import time, os
 from datetime import datetime
 
-# Adding Timestamps to Messages (User & Chatbot)
-timestamp = datetime.now().strftime("[%H:%M:%S]")
+def get_time_stamp():
+    return datetime.now().strftime("[%H:%M:%S]")
+
 
 def create_chatbot(choice):
     try:
-        print(f"{timestamp} Loading model, please wait...")
+        print(f"{get_time_stamp()} Loading model, please wait...")
         return pipeline(choice, model="facebook/blenderbot-400M-distill")
     except Exception as e:
-        print(f"{timestamp} Error loading model: {str(e)}")
-        print(f"{timestamp} Falling back to default conversation handling...")
+        print(f"{get_time_stamp()} Error loading model: {str(e)}")
+        print(f"{get_time_stamp()} Falling back to default conversation handling...")
         return None
     
 def fallback_response(text):
@@ -35,7 +36,7 @@ if __name__ == "__main__":
 
     # I must add here a restriction for these 2 choices
 
-    choice = input(f"{timestamp} Welcome! Would you like the chatbot to act sentimental or conversational? ")
+    choice = input(f"{get_time_stamp()} Welcome! Would you like the chatbot to act sentimental or conversational? ")
 
     # 1) Trying to load the model 
     chatbot = create_chatbot(choice)
@@ -43,17 +44,17 @@ if __name__ == "__main__":
     # Initialize conversation history
     conversation_history = []
 
-    print(f"{timestamp} Chatbot: Hello, how can I assist you today?")
+    print(f"{get_time_stamp()} Chatbot: Hello, how can I assist you today?")
 
     while True:
-        user_input = input(f"{timestamp} You: ").strip()
+        user_input = input(f"{get_time_stamp()} You: ").strip()
 
         if user_input.lower() in ['exit', 'quit', "bye", "goodbye"]:
             print('Chatbot: Goodbye! Have a great day!')
             break
 
         if chatbot:
-            conversation_history.append(f"{timestamp} User: {user_input}")
+            conversation_history.append(f"{get_time_stamp()} User: {user_input}")
 
             # Generate response using the model
             bot_response = chatbot("\n".join(conversation_history))
@@ -66,8 +67,8 @@ if __name__ == "__main__":
             # Append bot response to history
             conversation_history.append(f"Chatbot: {response_text}")
 
-            print(f"{timestamp} Chatbot: {response_text}")
+            print(f"{get_time_stamp()} Chatbot: {response_text}")
         else:
             # Use fallback responses when model is not available
             response = fallback_response(user_input)
-            print(f"{timestamp} Chatbot: {response}")
+            print(f"{get_time_stamp()} Chatbot: {response}")
