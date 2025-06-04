@@ -1,7 +1,7 @@
 from transformers import pipeline
 import time, os
 from datetime import datetime
-
+import re
 def get_time_stamp() -> str:
     return datetime.now().strftime("[%H:%M:%S]")
 
@@ -19,18 +19,38 @@ def create_chatbot(choice) -> str:
         print(f"{get_time_stamp()} Error loading model: {str(e)}")
         return None
     
-def calculate_nums(n1, n2, op) -> int:
-    n1, n2 = int(n1), int(n2)
+def calculate_nums(text):
+    match = re.search(r'^(\d+)\s*([+\-*/])\s*(\d+)$', text.strip())
+    arg1 = int(match.group(1))
+    op = match.group(2)
+    arg2 = int(match.group(3))
+    
+    if not match:
+        return "I didn't understand. Could you provide a valid calculation prompt?"
 
-    if op == '+':
-        return n1 + n2
-    elif op == '-':
-        return n1 - n2
-    elif op == '*':
-        return n1 * n2
-    elif op == '/':
-        return n1 / n2
-
+    try:
+        arg1 = int(match.group(1))
+        op = match.group(2)
+        arg2 = int(match.group(3))
+        
+        if op == '+':
+            r = arg1 + arg2
+            return str(r)
+        elif op == '-':
+            r = arg1 - arg2
+            return str(r)
+        elif op == '*':
+            r = arg1 * arg2
+            return str(r)
+        elif op == '/':
+            r = arg1 / arg2
+            if arg2 == 0:
+                return "Division by zero is not allowed."
+            return str(r)
+        else:
+            return "I didn't understand. Could you provide a valid calculation prompt?"
+    except Exception as e:
+        return f"Error in calculation: {str(e)}"
     
 def fallback_response(text) -> str:
     # Fallback response system if model fails to load
@@ -48,24 +68,15 @@ def fallback_response(text) -> str:
     elif "bye" in text or "goodbye" in text:
         return "Goodbye! It was nice chatting with you."
     
+    elif 'what are you doing' in text or 'what are you doing?' in text or 'whatcha doing' in text or 'whatcha doing?' in text:
+        return "Nothing really, just answering your questions. Feel free to ask anything you want."
+    
     elif 'clear' in text:
         os.system('clear')
         return "Clear confirmed! Would you like to ask a question?"
     
-    elif "calculate" in text or "what is" in text or '+' in text or '-' in text or '*' in text or '/' in text:
-        word = text.split()
-        arg1 = 0
-        arg2 = 0
-        arg3 = ''
-
-        for i in range(0, len(text) + 1):
-            if word[i].isdigit():        # Limited range of numbers for now
-                arg1 = word[i]
-            if word[i].isdigit():        # Limited range of numbers for now
-                arg2 = word[i]
-            if(word[i] in ['+', '-', '/', '*']):
-                arg3 = word[i]
-        return calculate_nums(arg1, arg2, arg3)
+    elif re.match(r'^\d+\s*[+\-*/]\s*\d+$', text.strip()):
+        return calculate_nums(text)
     else:
         return "I'm not sure how to respond to that. Could you try asking something else?"
     
