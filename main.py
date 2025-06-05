@@ -1,7 +1,8 @@
 from transformers import pipeline
 import time, os
 from datetime import datetime
-import re
+import re, pandas as pd
+import random
 def get_time_stamp() -> str:
     return datetime.now().strftime("[%H:%M:%S]")
 
@@ -19,6 +20,12 @@ def create_chatbot(choice) -> str:
         print(f"{get_time_stamp()} Error loading model: {str(e)}")
         return None
     
+def extract_expression(text):
+    match = re.search(r'(\d+)\s*([+\-*/])\s*(\d+)', text)
+    if match:
+        return f"{match.group(1)} {match.group(2)} {match.group(3)}"
+    return None
+
 def calculate_nums(text):
     match = re.search(r'^(\d+)\s*([+\-*/])\s*(\d+)$', text.strip())
     arg1 = int(match.group(1))
@@ -51,7 +58,13 @@ def calculate_nums(text):
             return "I didn't understand. Could you provide a valid calculation prompt?"
     except Exception as e:
         return f"Error in calculation: {str(e)}"
-    
+        
+def get_a_joke():
+    jokes = pd.read_csv('funjokes.csv')
+    jokes_list = jokes["Joke"].tolist()
+    random_index = random.randint(0, len(jokes_list) - 1)
+    return jokes_list[random_index]
+        
 def fallback_response(text) -> str:
     # Fallback response system if model fails to load
 
@@ -75,8 +88,13 @@ def fallback_response(text) -> str:
         os.system('clear')
         return "Clear confirmed! Would you like to ask a question?"
     
-    elif re.match(r'^\d+\s*[+\-*/]\s*\d+$', text.strip()):
-        return calculate_nums(text)
+    elif re.search(r'(\d+)\s*([+\-*/])\s*(\d+)', text):
+        expression = extract_expression(text)  # e.g., "2 + 2"
+        result = calculate_nums(expression)
+        return f"The result is: {result}"
+
+    elif 'tell me a joke' in text or 'tell me a joke.' in text or 'a joke' in text or 'a joke?' in text or 'another one' in text or 'another one.' in text or 'another one?' in text:
+        return get_a_joke()
     else:
         return "I'm not sure how to respond to that. Could you try asking something else?"
     

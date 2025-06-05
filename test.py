@@ -1,20 +1,12 @@
-import re
+import pandas as pd
+import random
 
-def calculate_nums(text) -> int:
-    match = re.match(r'(\d+)\s*([+\-*/])\s*(\d+)', text)
-    arg1 = int(match.group(1))
-    op = match.group(2)
-    arg2 = int(match.group(3))
-    
-    if op == '+':
-        return arg1 + arg2
-    elif op == '-':
-        return arg1 - arg2
-    elif op == '*':
-        return arg1 * arg2
-    elif op == '/':
-        return arg1 / arg2
-    else:
-        return "I didn't understand. Could you provide a valid calculation prompt?"
+def get_a_joke():
+    jokes = pd.read_csv('funjokes.csv')
+    print(jokes["Joke"])
+    jokes_list = jokes["Joke"].tolist()
+    return jokes_list
 
-print(calculate_nums("2 + num"))
+
+for j in get_a_joke():
+    print(j)
