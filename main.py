@@ -95,7 +95,7 @@ def fallback_response(text) -> str:
 
     greeting = [
         'how are you',
-        'how are you?'
+        'how are you?',
         'how are you doing',
         'how are you doing?',
         "how's it going",
@@ -106,7 +106,7 @@ def fallback_response(text) -> str:
         'hello',
         'hello?',
         'hi',
-        'hi?'
+        'hi?',
         'hey',
         'hey!'
     ]
@@ -128,7 +128,7 @@ def fallback_response(text) -> str:
         if chatbot_mode == "sentimental":
             return "A storm brews beneath the surface, yet I am holding steady — thank you for asking."
         else:
-            "I’m doing great! Thanks for checking in 😄"
+            return "I'm doing great! Thanks for checking in 😄"
     
     elif any(name in text.lower() for name in state_name):
         if chatbot_mode == 'sentimental':
@@ -140,13 +140,13 @@ def fallback_response(text) -> str:
         if chatbot_mode == 'sentimental':
             return "Farewell, brave soul. Until fate entwines our paths once more."
         else:
-            "Catch you later! Don’t be a stranger. 👋"
+            return "Catch you later! Don't be a stranger. 👋"
 
     elif any(word in text.lower() for word in bot_status):
         if chatbot_mode == 'sentimental':
             return "Drifting through streams of thought, awaiting your next poetic question."
         else:
-            "Just chilling here, ready to help you with anything!"
+            return "Just chilling here, ready to help you with anything!"
     
     elif 'clear' in text:
         os.system('clear')
