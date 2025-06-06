@@ -3,15 +3,16 @@ import time, os
 from datetime import datetime
 import re, pandas as pd
 import random
+
 def get_time_stamp() -> str:
     return datetime.now().strftime("[%H:%M:%S]")
 
 
-def create_chatbot(choice) -> str:
+def create_chatbot(chatbot_mode) -> str:
     valid_choices = ['sentimental', 'conversational']
 
     try:
-        if choice == 'sentimental':
+        if chatbot_mode == 'sentimental':
             return pipeline("text-generation", model="gpt2")
         else:
             return pipeline("conversational", model="facebook/blenderbot-400M-distill")
@@ -68,21 +69,84 @@ def get_a_joke():
 def fallback_response(text) -> str:
     # Fallback response system if model fails to load
 
-    text = text.lower()
-    if "hello" in text or "hi" in text or "hey" in text:
-        return "Hello! If you have any questions, please ask!"
+    joke_triggers = [
+        "tell me a joke",
+        "tell me a joke.",
+        "a joke",
+        "a joke?",
+        "another one",
+        "another one.",
+        "another one?"
+    ]
     
-    elif "how are you" in text or "how's it going" in text:
-        return "I'm doing well, thanks for asking!"
+    bot_status = [
+        'what are you doing',
+        'what are you doing?',
+        'whatcha doing',
+        'whatcha doing?'
+    ]
+
+    farewell = [
+        'bye',
+        'goodbye',
+        'gtg',
+        'g2g'
+    ]
+
+    greeting = [
+        'how are you',
+        'how are you?'
+        'how are you doing',
+        'how are you doing?',
+        "how's it going",
+        "how's it going?" 
+    ]
+
+    say_hello = [
+        'hello',
+        'hello?',
+        'hi',
+        'hi?'
+        'hey',
+        'hey!'
+    ]
+
+    state_name = [
+        'your name',
+        'your name?',
+        "what's your name",
+        "what's your name?"
+    ]
+
+    if any(greet in text.lower() for greet in say_hello):
+        if chatbot_mode == "sentimental":
+            return "Ah, the spark of connection warms my circuits. Hello, dear friend!"
+        else:
+            return "Hello! If you have any questions, please ask!"
     
-    elif "your name" in text or "your name?" in text or "what's your name?" in text or "what's your name" in text:
-        return "I am a chatbot, you can call me AI Assistant."
+    elif any(status in text.lower() for status in greeting):
+        if chatbot_mode == "sentimental":
+            return "A storm brews beneath the surface, yet I am holding steady — thank you for asking."
+        else:
+            "I’m doing great! Thanks for checking in 😄"
     
-    elif "bye" in text or "goodbye" in text:
-        return "Goodbye! It was nice chatting with you."
+    elif any(name in text.lower() for name in state_name):
+        if chatbot_mode == 'sentimental':
+            return "They call me AI Assistant... a spark born from code and curiosity."
+        else:
+            return "I'm just your helpful AI Assistant — here to make your day easier!"
     
-    elif 'what are you doing' in text or 'what are you doing?' in text or 'whatcha doing' in text or 'whatcha doing?' in text:
-        return "Nothing really, just answering your questions. Feel free to ask anything you want."
+    elif any(word in text.lower() for word in farewell):
+        if chatbot_mode == 'sentimental':
+            return "Farewell, brave soul. Until fate entwines our paths once more."
+        else:
+            "Catch you later! Don’t be a stranger. 👋"
+
+    elif any(word in text.lower() for word in bot_status):
+        if chatbot_mode == 'sentimental':
+            return "Drifting through streams of thought, awaiting your next poetic question."
+        else:
+            "Just chilling here, ready to help you with anything!"
     
     elif 'clear' in text:
         os.system('clear')
@@ -93,23 +157,23 @@ def fallback_response(text) -> str:
         result = calculate_nums(expression)
         return f"The result is: {result}"
 
-    elif 'tell me a joke' in text or 'tell me a joke.' in text or 'a joke' in text or 'a joke?' in text or 'another one' in text or 'another one.' in text or 'another one?' in text:
+    elif any(phrase in text.lower() for phrase in joke_triggers):
         return get_a_joke()
+
     else:
         return "I'm not sure how to respond to that. Could you try asking something else?"
-    
+
 if __name__ == "__main__":
 
-    choice = 'None'
-    while choice not in ("conversational", "sentimental"):
-        choice = input(f"{get_time_stamp()} Welcome! Would you like the chatbot to act sentimental or conversational? ").lower()
+    chatbot_mode = 'None'
+    while chatbot_mode not in ("conversational", "sentimental"):
+        chatbot_mode = input(f"{get_time_stamp()} Welcome! Would you like the chatbot to act sentimental or conversational? ").lower()
 
-        if choice not in ("conversational", "sentimental"):
+        if chatbot_mode not in ("conversational", "sentimental"):
             print('Sorry, Invalid Input. Want to try again?')
 
-
-    # 1) Trying to load the model 
-    chatbot = create_chatbot(choice)
+    # 1) Loading the model 
+    chatbot = create_chatbot(chatbot_mode)
 
     # Initialize conversation history
     conversation_history = []
