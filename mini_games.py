@@ -28,37 +28,48 @@ def rock_paper_scissors():
         except ValueError as e:
             print("{e}")
         
-        COMPUTER = random.randint(0, len(choices) - 1)
+        COMPUTER = choices[random.randint(0, len(choices) - 1)]
 
 
         if PLAYER == 'rock':
             if COMPUTER == 'rock':
+                print(f'I chose: {COMPUTER.upper()}')
                 print("It's a draw!")
             elif COMPUTER == 'paper':
+                print(f'I chose: {COMPUTER.upper()}')
                 print('I won! . Better Luck next time.')
             else:
+                print(f'I chose: {COMPUTER.upper()}')
                 print('You won! . Congrats!')
 
         if PLAYER == 'paper':
             if COMPUTER == 'rock':
+                print(f'I chose: {COMPUTER.upper()}')
                 print('You won! . Congrats!')
             elif COMPUTER == 'paper':
+                print(f'I chose: {COMPUTER.upper()}')
                 print("It's a draw!")
             else:
+                print(f'I chose: {COMPUTER.upper()}')
                 print('I won! . Better Luck next time.')
 
         if PLAYER == 'scissors':
             if COMPUTER == 'rock':
+                print(f'I chose: {COMPUTER.upper()}')
                 print('I won! . Better luck next time.')
             elif COMPUTER == 'paper':
+                print(f'I chose: {COMPUTER.upper()}')
                 print('You won! . Congrats!')
             else:
+                print(f'I chose: {COMPUTER.upper()}')
                 print("It's a draw!")
         
         # Check if the user wants to play another game
         PLAY_AGAIN = input('Would you like to play another game?').lower()
 
         if PLAY_AGAIN in ['no', 'n']:
-            GAME_ON == False
+            GAME_ON = False
+    print('OK, bye.')
 
-# ADD: Guess the word game
+def hangman_game():
+    pass

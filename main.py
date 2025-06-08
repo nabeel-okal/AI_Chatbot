@@ -71,6 +71,9 @@ def fallback_response(text) -> str:
 
     elif any(phrase in text.lower() for phrase in fn.joke_triggers):
         return fn.get_a_joke()
+    
+    elif any(intro in text.lower() for intro in fn.intro_list):
+        fn.who_are_you()
 
     else:
         return "I'm not sure how to respond to that. Could you try asking something else?"

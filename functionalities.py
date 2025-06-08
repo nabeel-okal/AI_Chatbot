@@ -52,8 +52,14 @@ state_name = [
     "what's your name?"
 ]
 
-intro = [
-    
+intro_list = [
+    "who are you?",
+    "what's your name?",
+    "may i know who i'm chatting with?",
+    "tell me about yourself.",
+    "are you a robot?",
+    "what kind of bot are you?",
+    "are you human?"
 ]
 
 def calculate_nums(text):
@@ -97,3 +103,5 @@ def get_a_joke():
 
 def get_time_stamp() -> str:
     return datetime.now().strftime("[%H:%M:%S]")
+
+def who_are_you() -> str: return "I am an AI Assistant Chat Bot, you could call me Sam."
