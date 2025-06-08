@@ -52,6 +52,10 @@ state_name = [
     "what's your name?"
 ]
 
+intro = [
+    
+]
+
 def calculate_nums(text):
     match = re.search(r'^(\d+)\s*([+\-*/])\s*(\d+)$', text.strip())
     arg1 = int(match.group(1))
@@ -93,44 +97,3 @@ def get_a_joke():
 
 def get_time_stamp() -> str:
     return datetime.now().strftime("[%H:%M:%S]")
-
-def rock_paper_scissors(chatbot_mode):
-    print("Ok, let's go! . That sounds interesting!!")
-
-    GAME_ON = True
-    while(GAME_ON):
-        choices = ['rock', 'paper', 'scissors']
-
-        # Validate the choices here
-        PLAYER = input('Enter your choice (Rock | Paper | Scissors"): ').lower()
-        COMPUTER = random.randint(0, len(choices) - 1)
-
-        # HINT: There is a better way of validating the winner.
-
-        if PLAYER == 'rock' and COMPUTER == 'rock':
-            print("It's a draw!")
-
-        if PLAYER == 'rock' and COMPUTER == 'paper':
-            print("I won!")
-        if PLAYER == 'rock' and COMPUTER == 'scissors':
-            print('You won! . Ok, you beat this time')
-
-
-        if PLAYER == 'paper' and COMPUTER == 'rock':
-            print("You won! . Ok, you beat this time")
-
-        if PLAYER == 'paper' and COMPUTER == 'paper':
-            print("It's a draw!")
-        if PLAYER == 'paper' and COMPUTER == 'scissors':
-            print('I won! . Better Luck next time!')
-
-        
-        if PLAYER == 'scissors' and COMPUTER == 'rock':
-            print("I won! . Better Luck next time!")
-
-        if PLAYER == 'scissors' and COMPUTER == 'paper':
-            print("You won! . Ok, you beat this time.")
-        if PLAYER == 'scissors' and COMPUTER == 'scissors':
-            print("It's a draw!")
-
-# ADD: Guess the word game

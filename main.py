@@ -3,6 +3,7 @@ import os
 from datetime import datetime
 import re, pandas as pd
 import functionalities as fn
+import mini_games as mg
 
 def create_chatbot(chatbot_mode) -> str:
     valid_choices = ['sentimental', 'conversational']
@@ -56,6 +57,9 @@ def fallback_response(text) -> str:
         else:
             return "Just chilling here, ready to help you with anything!"
     
+    elif any(game in text.lower() for game in mg.RPS_PROMPTS):
+        mg.rock_paper_scissors()
+
     elif 'clear' in text:
         os.system('clear')
         return "Clear confirmed! Would you like to ask a question?"
