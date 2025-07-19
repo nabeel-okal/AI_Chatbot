@@ -75,6 +75,9 @@ def fallback_response(text) -> str:
     elif any(intro in text.lower() for intro in fn.intro_list):
         fn.who_are_you()
 
+    elif any(game in text.lower() for game in mg.HANGMAN_PROMPTS):
+        mg.hangman_game()
+
     else:
         return "I'm not sure how to respond to that. Could you try asking something else?"
 
